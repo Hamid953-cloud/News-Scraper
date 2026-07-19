@@ -7,6 +7,8 @@ A multi-source news scraper with a web dashboard, automated background scraping,
 ![SQLite](https://img.shields.io/badge/Database-SQLite-003B57)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+**🔴 [Live Demo](https://news-scraper-nkskzoyrgpysdrbg6fnt8c.streamlit.app)** — try it right now, no install needed.
+
 ---
 
 ## What it does
@@ -15,7 +17,7 @@ This project automatically scrapes headlines from multiple news sites, stores th
 
 ## Features
 
-- 🔎 **Multi-source scraping** — BBC News, Dawn News, Al Jazeera (easily extendable, see `sources.py`)
+- 🔎 **Multi-source scraping** — BBC News, Dawn News, Al Jazeera, CNN, Geo News (easily extendable, see `sources.py`)
 - 🗄️ **SQLite storage with deduplication** — never stores the same article twice
 - ⏰ **Background automation** — runs on a schedule via Windows Task Scheduler / cron, no manual triggering needed
 - 🖥️ **Web dashboard** — search, filter by source, browse everything collected
@@ -37,8 +39,9 @@ This project automatically scrapes headlines from multiple news sites, stores th
 - **Python 3** — core scraping and logic
 - **Requests + BeautifulSoup** — HTML fetching and parsing
 - **SQLite** — lightweight local database
-- **Flask** — web dashboard
-- **Chart.js** — analytics charts
+- **Flask** — local web dashboard
+- **Streamlit** — deployed cloud dashboard ([live demo](https://news-scraper-nkskzoyrgpysdrbg6fnt8c.streamlit.app))
+- **Chart.js** — analytics charts (Flask version)
 - **smtplib** — email alerts
 
 ## Project Structure
@@ -51,7 +54,8 @@ news_scraper/
 ├── duplicates.py              # Cross-source related-story detection
 ├── alerts.py                   # Keyword matching + email sending
 ├── alert_config.example.py      # Template for your email/keyword settings
-├── dashboard.py                  # Flask web dashboard
+├── dashboard.py                  # Flask web dashboard (local use)
+├── streamlit_app.py               # Streamlit dashboard (used for cloud deployment)
 ├── templates/                     # Dashboard HTML pages
 │   ├── dashboard.html
 │   ├── analytics.html
