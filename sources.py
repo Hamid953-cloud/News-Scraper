@@ -36,4 +36,22 @@ SOURCES = [
         "date_attrs": None,
         "base_url": "https://www.aljazeera.com",
     },
+    {
+        "name": "CNN",
+        "url": "https://www.cnn.com/world",
+        "primary_selector": "a.container__link",
+        "fallback_selectors": ["a.card__link", "h3 a", "article a"],
+        "headline_attrs": {"class": "container__headline-text"},
+        "date_attrs": None,
+        "base_url": "https://www.cnn.com",
+    },
+    {
+        "name": "Geo News",
+        "url": "https://www.geo.tv/",
+        "primary_selector": "article a",
+        "fallback_selectors": ["h2 a", "h3 a", ".open-section a"],
+        "headline_attrs": None,
+        "date_attrs": None,
+        "base_url": "https://www.geo.tv",
+    },
 ]
