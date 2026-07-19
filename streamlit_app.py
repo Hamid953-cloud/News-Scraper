@@ -53,7 +53,13 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-SOURCE_ICONS = {"BBC News": "🟥", "Dawn News": "🟩", "Al Jazeera": "🟨"}
+SOURCE_ICONS = {
+    "BBC News": "🟥",
+    "Dawn News": "🟩",
+    "Al Jazeera": "🟨",
+    "CNN": "🟦",
+    "Geo News": "🟪",
+}
 
 # --- Sidebar controls ---
 with st.sidebar:
@@ -75,13 +81,15 @@ with st.sidebar:
     st.caption("[View source on GitHub](https://github.com/Hamid953-cloud/News-Scraper)")
 
 # --- Top metrics row ---
+# --- Top metrics row ---
 total = database.count_articles()
 source_counts = dict(database.get_source_counts())
 
-m1, m2, m3, m4 = st.columns(4)
-m1.metric("Total Articles", total)
-for i, (src, count) in enumerate(list(source_counts.items())[:3]):
-    [m2, m3, m4][i].metric(f"{SOURCE_ICONS.get(src, '📰')} {src}", count)
+metric_cols = st.columns(len(source_counts) + 1)
+metric_cols[0].metric("Total Articles", total)
+for i, (src, count) in enumerate(source_counts.items()):
+    icon = SOURCE_ICONS.get(src, "📰")
+    metric_cols[i + 1].metric(f"{icon} {src}", count)
 
 st.markdown("")  # spacing
 
