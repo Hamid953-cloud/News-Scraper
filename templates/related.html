@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Related Stories - News Scraper</title>
+<style>
+    :root {
+        --bg: #f4f5f7; --card: #ffffff; --text: #1a1a2e;
+        --muted: #6b7280; --accent: #2563eb; --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); }
+    header { background: var(--text); color: white; padding: 24px 20px; }
+    header h1 { margin: 0 0 4px 0; font-size: 22px; }
+    header p { margin: 0; color: #9ca3af; font-size: 14px; }
+    nav { margin-top: 14px; display: flex; gap: 16px; }
+    nav a { color: #d1d5db; text-decoration: none; font-size: 14px; padding-bottom: 4px; border-bottom: 2px solid transparent; }
+    nav a.active, nav a:hover { color: white; border-bottom-color: var(--accent); }
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+    .stats { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+    .cluster {
+        background: var(--card); border-radius: 10px; padding: 16px;
+        margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        border-left: 4px solid var(--accent);
+    }
+    .cluster-label { font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; }
+    .story { padding: 8px 0; border-top: 1px solid var(--border); }
+    .story:first-child { border-top: none; }
+    .story a { color: var(--text); font-weight: 600; text-decoration: none; }
+    .story a:hover { color: var(--accent); }
+    .badge { background: #eef2ff; color: var(--accent); padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-right: 8px; }
+    .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>📰 News Scraper Dashboard</h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/analytics">Analytics</a>
+        <a href="/related" class="active">Related Stories</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="stats">
+        {{ cluster_count }} group{{ 's' if cluster_count != 1 else '' }} of related stories found
+        (same event, covered by multiple sources)
+    </div>
+
+    {% if clusters %}
+        {% for cluster in clusters %}
+        <div class="cluster">
+            <div class="cluster-label">{{ cluster | length }} sources covering this story</div>
+            {% for a in cluster %}
+            <div class="story">
+                <span class="badge">{{ a.source }}</span>
+                <a href="{{ a.link }}" target="_blank" rel="noopener">{{ a.title }}</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty">No related stories found yet. This grows as more sources cover the same events.</div>
+    {% endif %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+
+# Sensitive credentials — NEVER upload this
+alert_config.py
+
+# Database and logs (personal data, regenerates automatically)
+articles.db
+scraper.log
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS junk files
+.DS_Store
+Thumbs.db

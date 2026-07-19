@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics - News Scraper</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+    :root {
+        --bg: #f4f5f7; --card: #ffffff; --text: #1a1a2e;
+        --muted: #6b7280; --accent: #2563eb; --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); }
+    header { background: var(--text); color: white; padding: 24px 20px; }
+    header h1 { margin: 0 0 4px 0; font-size: 22px; }
+    header p { margin: 0; color: #9ca3af; font-size: 14px; }
+    nav { margin-top: 14px; display: flex; gap: 16px; }
+    nav a { color: #d1d5db; text-decoration: none; font-size: 14px; padding-bottom: 4px; border-bottom: 2px solid transparent; }
+    nav a.active, nav a:hover { color: white; border-bottom-color: var(--accent); }
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+    .card {
+        background: var(--card); border-radius: 10px; padding: 20px;
+        margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card h2 { margin: 0 0 16px 0; font-size: 16px; }
+    .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>📰 News Scraper Dashboard</h1>
+    <p>{{ total }} articles collected so far</p>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/analytics" class="active">Analytics</a>
+        <a href="/related">Related Stories</a>
+    </nav>
+</header>
+
+<div class="container">
+    {% if total == 0 %}
+        <div class="empty">No data yet. Run the scraper first.</div>
+    {% else %}
+    <div class="card">
+        <h2>Articles per Source</h2>
+        <canvas id="sourceChart" height="180"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Articles Scraped per Day (last 7 days)</h2>
+        <canvas id="dailyChart" height="180"></canvas>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    const sourceLabels = {{ source_labels | tojson }};
+    const sourceValues = {{ source_values | tojson }};
+    const dailyLabels = {{ daily_labels | tojson }};
+    const dailyValues = {{ daily_values | tojson }};
+
+    new Chart(document.getElementById('sourceChart'), {
+        type: 'bar',
+        data: {
+            labels: sourceLabels,
+            datasets: [{
+                label: 'Articles',
+                data: sourceValues,
+                backgroundColor: '#2563eb',
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+    });
+
+    new Chart(document.getElementById('dailyChart'), {
+        type: 'line',
+        data: {
+            labels: dailyLabels,
+            datasets: [{
+                label: 'Articles scraped',
+                data: dailyValues,
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37,99,235,0.1)',
+                fill: true,
+                tension: 0.3,
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+    });
+</script>
+
+</body>
+</html>
