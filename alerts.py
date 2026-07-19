@@ -8,13 +8,19 @@ import logging
 import smtplib
 from email.mime.text import MIMEText
 
-import alert_config
+try:
+    import alert_config
+    ALERTS_ENABLED = True
+except ImportError:
+    # alert_config.py doesn't exist (e.g. on a fresh clone or cloud deployment
+    # where it was never created). Alerts are simply disabled instead of crashing.
+    ALERTS_ENABLED = False
 
 
 def find_matches(articles: list[dict]) -> list[dict]:
     """Return the subset of articles whose title contains any keyword
     from alert_config.KEYWORDS (case-insensitive)."""
-    if not alert_config.KEYWORDS:
+    if not ALERTS_ENABLED or not alert_config.KEYWORDS:
         return []
 
     matches = []
@@ -29,7 +35,7 @@ def find_matches(articles: list[dict]) -> list[dict]:
 
 def send_email_alert(matched_articles: list[dict]):
     """Send one email listing all matched articles from this run."""
-    if not matched_articles:
+    if not ALERTS_ENABLED or not matched_articles:
         return
 
     subject = f"🔔 News Alert: {len(matched_articles)} new article(s) match your keywords"
